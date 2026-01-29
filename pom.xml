@@ -8,12 +8,21 @@
   <name>Hackathon-ChessEngine</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+
+      <dependency>
+          <groupId>knight.clubbing</groupId>
+          <artifactId>knightclubbinglogic</artifactId>
+          <version>1.0</version>
+      </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+
+
   </dependencies>
   <build>
     <plugins>
