@@ -3,6 +3,10 @@ package sopra.steria.search;
 import knight.clubbing.core.BBoard;
 import knight.clubbing.core.BMove;
 import knight.clubbing.movegen.MoveGenerator;
+import sopra.steria.evaluation.BadEvaluator;
+import sopra.steria.evaluation.Evaluator;
+import sopra.steria.ordering.BadMoveOrderer;
+import sopra.steria.ordering.MoveOrderer;
 
 import java.util.Random;
 
@@ -15,7 +19,13 @@ public class Search {
     private SearchSetting setting;
     private final Random rng = new Random();
 
-    public Search() {}
+    private final Evaluator evaluator;
+    private final MoveOrderer moveOrderer;
+
+    public Search() {
+        this.evaluator = new BadEvaluator();
+        this.moveOrderer = new BadMoveOrderer();
+    }
 
     public SearchResult bestMove(BBoard board, SearchSetting setting) {
         this.startTime = System.currentTimeMillis();
@@ -32,7 +42,7 @@ public class Search {
 
             BMove[] moves = new MoveGenerator(board).generateMoves(false);
 
-            // todo order moves
+            moveOrderer.orderMoves(moves, board);
 
             for (BMove move : moves) {
                 if (shouldStop()) break;
@@ -59,13 +69,13 @@ public class Search {
         }
 
         if (depth <= 0)
-            return this.rng.nextInt(INF / 10); // todo evaluate(board);
+            return evaluator.evaluate(board);
 
         int bestScore = -INF;
 
         BMove[] nextMoves = new MoveGenerator(board).generateMoves(false);
 
-        // todo order moves
+        moveOrderer.orderMoves(nextMoves, board);
 
         if (nextMoves.length == 0) {
             if (board.isInCheck())
