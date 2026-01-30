@@ -9,9 +9,11 @@ INPUT_ARG1="$1"         # Base version
 INPUT_ARG2="$2"         # Changed version
 PRESET=${3:-"default"}  # (Opt) preset name from sprt_presets.ini
 
+# Example of use of preset: ./test_sprt.sh <base_version> <changed_version> <preset_name>
+
 WORK_DIR=$(pwd)
-ENGINE1="$WORK_DIR/engines/knightclubbingengine-$INPUT_ARG1.jar"
-ENGINE2="$WORK_DIR/engines/knightclubbingengine-$INPUT_ARG2.jar"
+ENGINE1="$WORK_DIR/engines/Hackathon-ChessEngine-$INPUT_ARG1.jar"
+ENGINE2="$WORK_DIR/engines/Hackathon-ChessEngine-$INPUT_ARG2.jar"
 PGNOUT="$WORK_DIR/games.pgn"
 CONFIG_FILE="$WORK_DIR/sprt_presets.ini"
 

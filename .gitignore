@@ -91,3 +91,4 @@ http-client.private.env.json
 target/
 test-sprt/games.pgn
 *.jar
+/dependency-reduced-pom.xml

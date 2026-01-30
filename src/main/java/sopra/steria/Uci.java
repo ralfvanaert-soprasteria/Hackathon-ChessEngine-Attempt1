@@ -6,6 +6,7 @@ import knight.clubbing.movegen.MoveGenerator;
 import knight.clubbing.opening.OpeningService;
 import sopra.steria.search.Search;
 import sopra.steria.search.SearchResult;
+import sopra.steria.search.SearchSetting;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,7 +28,6 @@ public class Uci {
     private BBoard board;
     private Thread searchThread;
     private Search search;
-    private OpeningService openingService = new OpeningService();
 
     protected BBoard getBoard() {
         return board;
@@ -158,7 +158,7 @@ public class Uci {
                 } else {
                     moveTime = 60000; // 60 seconds default
                 }
-                SearchResult result = search.bestMove(board, new sopra.steria.search.SearchSetting());
+                SearchResult result = search.bestMove(board, new SearchSetting(depth, moveTime));
                 move = result.getBestMove();
             } catch (Throwable t) {
                 t.printStackTrace();

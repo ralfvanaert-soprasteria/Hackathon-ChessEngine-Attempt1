@@ -12,15 +12,14 @@ import static sopra.steria.EngineConst.MATE_SCORE;
 public class Search {
 
     private long startTime;
-
+    private SearchSetting setting;
     private final Random rng = new Random();
 
-    public Search() {
-
-    }
+    public Search() {}
 
     public SearchResult bestMove(BBoard board, SearchSetting setting) {
         this.startTime = System.currentTimeMillis();
+        this.setting = setting;
 
         SearchResult result = new SearchResult();
         result.setScore(-INF);
@@ -28,23 +27,27 @@ public class Search {
         int alpha = -INF;
         int beta = INF;
 
-        BMove[] moves = new MoveGenerator(board).generateMoves(false);
-
-        // todo order moves
-
-        for (BMove move : moves) {
+        for (int depth = 1; depth <= setting.maxDepth(); depth++) {
             if (shouldStop()) break;
 
-            board.makeMove(move, true);
-            int score = -negamax(board, setting.maxDepth() - 1, -beta, -alpha, 1);
-            board.undoMove(move, true);
+            BMove[] moves = new MoveGenerator(board).generateMoves(false);
 
-            if (score > result.getScore()) {
-                result.setScore(score);
-                result.setBestMove(move.getUci());
+            // todo order moves
+
+            for (BMove move : moves) {
+                if (shouldStop()) break;
+
+                board.makeMove(move, true);
+                int score = -negamax(board, depth - 1, -beta, -alpha, 1);
+                board.undoMove(move, true);
+
+                if (score > result.getScore()) {
+                    result.setScore(score);
+                    result.setBestMove(move.getUci());
+                }
+
+                alpha = Math.max(alpha, score);
             }
-
-            alpha = Math.max(alpha, score);
         }
 
         return result;
@@ -56,7 +59,7 @@ public class Search {
         }
 
         if (depth <= 0)
-            return this.rng.nextInt(INF/10); // todo evaluate(board);
+            return this.rng.nextInt(INF / 10); // todo evaluate(board);
 
         int bestScore = -INF;
 
@@ -72,15 +75,11 @@ public class Search {
         }
 
         for (BMove move : nextMoves) {
-            // Make and undo move
             board.makeMove(move, true);
             int score = -negamax(board, depth - 1, -beta, -alpha, ply + 1);
             board.undoMove(move, true);
 
-            // Update best score
             bestScore = Math.max(bestScore, score);
-
-            // Alpha-beta pruning
             alpha = Math.max(alpha, score);
 
             if (alpha >= beta) {
@@ -92,6 +91,6 @@ public class Search {
     }
 
     private boolean shouldStop() {
-        return false;
+        return System.currentTimeMillis() - startTime >= setting.timeLimit();
     }
 }
