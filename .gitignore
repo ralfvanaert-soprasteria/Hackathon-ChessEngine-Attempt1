@@ -89,3 +89,5 @@ http-client.private.env.json
 /.tool-versions
 
 target/
+test-sprt/games.pgn
+*.jar
