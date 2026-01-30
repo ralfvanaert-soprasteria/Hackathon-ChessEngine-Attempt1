@@ -4,6 +4,8 @@ import knight.clubbing.core.BBoard;
 import knight.clubbing.core.BMove;
 import knight.clubbing.movegen.MoveGenerator;
 import knight.clubbing.opening.OpeningService;
+import sopra.steria.search.Search;
+import sopra.steria.search.SearchResult;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class Uci {
 
     private BBoard board;
     private Thread searchThread;
-    //private Negamax negamax;
+    private Search search;
     private OpeningService openingService = new OpeningService();
 
     protected BBoard getBoard() {
@@ -140,7 +142,7 @@ public class Uci {
                     break;
             }
         }
-        //negamax = new Negamax(openingService);
+        search = new Search();
 
         int time = whiteToMove ? wtime : btime;
         int inc = whiteToMove ? winc : binc;
@@ -156,8 +158,8 @@ public class Uci {
                 } else {
                     moveTime = 60000; // 60 seconds default
                 }
-                //SearchResponse response = negamax.search(board, new SearchSettings(depth, moveTime, 1, false));
-                //move = response.bestMove();
+                SearchResult result = search.bestMove(board, new sopra.steria.search.SearchSetting());
+                move = result.getBestMove();
             } catch (Throwable t) {
                 t.printStackTrace();
                 try (PrintWriter log = new PrintWriter(new FileWriter("engine_crash.log", true))) {
