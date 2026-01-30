@@ -1,4 +1,7 @@
 package sopra.steria.search;
 
-public record SearchSetting() {
+public record SearchSetting(
+        int maxDepth,
+        long timeLimit
+) {
 }
