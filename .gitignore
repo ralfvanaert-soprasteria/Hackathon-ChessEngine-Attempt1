@@ -92,3 +92,4 @@ target/
 test-sprt/games.pgn
 *.jar
 /dependency-reduced-pom.xml
+/test-sprt/config.json
