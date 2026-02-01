@@ -8,6 +8,7 @@ public class BadEvaluator implements Evaluator {
 
     @Override
     public int evaluate(BBoard board) {
+        // Me counts material
         int white = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.white));
         int black = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.white));
 

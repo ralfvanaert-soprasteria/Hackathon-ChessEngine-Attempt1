@@ -6,17 +6,6 @@ import knight.clubbing.core.BPiece;
 
 public class BadMoveOrderer implements MoveOrderer {
 
-    private static final int[] PIECE_PRIORITY = {
-            0,    // EMPTY
-            500,  // PAWN
-            750,  // KNIGHT
-            100,  // BISHOP
-            300,  // ROOK
-            450,  // QUEEN
-            100   // KING
-    };
-
-
     @Override
     public void orderMoves(BMove[] moves, BBoard board) {
         int[] scores = new int[moves.length];
@@ -29,9 +18,29 @@ public class BadMoveOrderer implements MoveOrderer {
     }
 
     private int score(BMove move, BBoard board) {
+        int score = 0;
         int movingPiece = board.getPieceBoards()[move.startSquare()];
+        int victimPiece = board.getPieceBoards()[move.targetSquare()];
 
-        return PIECE_PRIORITY[BPiece.getPieceType(movingPiece)];
+        // Oooh me move knight!
+        if (BPiece.getPieceType(movingPiece) == BPiece.knight)
+            score += 1000;
+
+        switch(BPiece.getPieceType(victimPiece)) {
+            case BPiece.queen:
+                score += 900; // Oooh me queen!
+                break;
+            case BPiece.rook:
+                score += 500; // Oooh juicy rook!
+                break;
+            case BPiece.none:
+                break;
+            default:
+                score += 100; // Take take take!
+                break;
+        }
+
+        return score;
     }
 
     private void sortMovesByScore(BMove[] moves, int[] scores) {
