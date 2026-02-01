@@ -4,6 +4,7 @@ import knight.clubbing.core.BBoard;
 import knight.clubbing.core.BMove;
 import knight.clubbing.movegen.MoveGenerator;
 import knight.clubbing.opening.OpeningService;
+import sopra.steria.ordering.BadMoveOrderer;
 import sopra.steria.search.Search;
 import sopra.steria.search.SearchResult;
 import sopra.steria.search.SearchSetting;
@@ -146,7 +147,7 @@ public class Uci {
 
         int time = whiteToMove ? wtime : btime;
         int inc = whiteToMove ? winc : binc;
-        int depth = depthInput > 0 ? depthInput : DEFAULT_DEPTH;
+        int depth = depthInput > 0 ? depthInput : calculateDepth(time, inc);
 
         searchThread = new Thread(() -> {
             String move = "";
@@ -179,8 +180,8 @@ public class Uci {
                 } else {
                     BMove[] someMoves = new MoveGenerator(board).generateMoves(false);
                     if (someMoves.length > 0) {
-                        //MoveOrderer moveOrderer = new BasicMoveOrderer(new MvvLvaFeature());
-                        //moveOrderer.order(someMoves, board, null);
+                        BadMoveOrderer badMoveOrderer = new BadMoveOrderer();
+                        badMoveOrderer.orderMoves(someMoves, board);
                         sendCommand("bestmove " + someMoves[0].getUci());
                     } else {
                         sendCommand("bestmove 0000");
@@ -192,4 +193,15 @@ public class Uci {
 
         searchThread.start();
     }
+
+    int calculateDepth(int time, int increment) {
+        if (time <= 0) return DEFAULT_DEPTH;
+
+        int baseDepth = 6;
+        int timeFactor = time / 30000; // Add for time (30 seconds = +1 depth)
+        int incrementFactor = increment / 3000; // Adjust for increment (3 seconds = +1 depth)
+
+        return Math.max(baseDepth + timeFactor + incrementFactor, DEFAULT_DEPTH);
+    }
+
 }
