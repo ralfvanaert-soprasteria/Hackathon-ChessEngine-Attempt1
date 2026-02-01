@@ -1,15 +1,37 @@
-# Hackathon-ChessEngine
+<h1>Hackathon-ChessEngine</h1>
+
+A chess engine to be developed during a hackathon.
+<br/>
+For competing, fork this repository. Please refer to the [Competing with the Engine](#competing-with-the-engine) section.
+
+<!-- TOC -->
+* [Setup](#setup)
+  * [Competing with the Engine](#competing-with-the-engine)
+  * [KnightClubbingLogic](#knightclubbinglogic)
+  * [Cutechess-cli](#cutechess-cli)
+    * [Linux & MacOS](#linux--macos)
+    * [Windows](#windows)
+  * [Usage](#usage)
+<!-- TOC -->
 
 # Setup
 Everything to develop this chess engine.
 Prerequisites:
 - Java 17 or higher
 - Maven
-- Git (and cloned this repository)
+- Git
 
 Setup includes:
+- Competing setup
 - KnightClubbingLogic maven dependency
 - Cutechess-cli installation
+- 
+## Competing with the Engine
+To participate in the hackathon, you need to fork this repository and push your changes to your fork.
+1. Fork this repository on GitHub.
+2. Clone your forked repository.
+3. Make your changes, commit and push them.
+4. Create a pull request to the original repository before the deadline.
 
 ## KnightClubbingLogic
 1. Clone the repository:
@@ -57,3 +79,9 @@ Picking the right one for your OS:
    ```
    cutechess-cli --help
    ```
+   
+## Usage
+To run your chess engine separately, run the jar:
+```
+java -jar Hackathon-ChessEngine-<version>.jar
+```
