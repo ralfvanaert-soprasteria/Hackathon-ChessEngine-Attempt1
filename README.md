@@ -12,7 +12,32 @@ For competing, fork this repository. Please refer to the [Competing with the Eng
     * [Linux & MacOS](#linux--macos)
     * [Windows](#windows)
   * [Usage](#usage)
+    * [SPRT testing](#sprt-testing)
 <!-- TOC -->
+
+# Scope of Hackathon
+You have absolute freedom to modify and improve the chess engine in any way you see fit, but there are some restrictions and suggestions.
+
+Restrictions:
+- Must be based on this codebase (java 17, maven).
+- Must be single threaded: no threads created or parallelism.
+- No external sources allowed, including API's, pre-trained models, developed engines, etc.
+
+Suggestive restrictions:
+- No opening books. Games will be played from 8 moves deep.
+- No endgame tablebases. Implementation too risky and potentially too time consuming for pay-off. 
+
+Suggestions:
+- Focus on search, ordering and evaluation improvements.
+- Try to keep the engine fast and lightweight. 
+  - Any millisecond spent is time not spent searching deeper and finding the better move.
+  - Avoid (heavy) complex data structures.
+  - Assume input is always valid, avoid unnecessary checks.
+- SPRT-test often, after every change.
+  - Changed a parameter? Test it!
+  - Changed a line? Test it!
+  - Reoredered functions? Test it!
+- Have fun and be creative!
 
 # Setup
 Everything to develop this chess engine.
@@ -85,3 +110,13 @@ To run your chess engine separately, run the jar:
 ```
 java -jar Hackathon-ChessEngine-<version>.jar
 ```
+
+### SPRT testing
+To run the sprt tests, run in `test-sprt` directory:
+```
+./test_sprt.sh <base_version> <new_version>
+```
+See `test-sprt/test_sprt.sh` for more details. Results of SPRT:
+- H0 accepted: The new version is not better than the base version.
+- H1 accepted: The new version is better than the base version.
+- LOS: Likelihood of superiority of new over base version.
