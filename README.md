@@ -1,6 +1,26 @@
 # Hackathon-ChessEngine
 
 # Setup
+Everything to develop this chess engine.
+Prerequisites:
+- Java 17 or higher
+- Maven
+- Git (and cloned this repository)
+
+Setup includes:
+- KnightClubbingLogic maven dependency
+- Cutechess-cli installation
+
+## KnightClubbingLogic
+1. Clone the repository:
+   ```
+   git clone
+   ```
+2. Navigate to the project directory and maven install:
+   ```
+   cd Hackathon-ChessEngine
+   mvn install
+   ```
 
 ## Cutechess-cli
 Executables can be found in the `test-sprt/builds` directory.
@@ -15,17 +35,17 @@ Picking the right one for your OS:
 ### Linux & MacOS
 1. 
    Ensure the `cutechess-cli` is executable. Run:
-   ```bash
+   ```
    chmod +x cutechess-cli
    ```
 
 2. Move the file to a directory in your PATH
-   ```bash
+   ```
    sudo mv cutechess-cli /usr/local/bin/
    ```
 
 3. **Verify the Installation**
-   ```bash
+   ```
    cutechess-cli --help
    ```
 
@@ -34,8 +54,6 @@ Picking the right one for your OS:
 2. Add the directory to PATH environment variable:
    - Add the path to the directory where you placed `cutechess-cli.exe`.
 3. **Verify the Installation**
-   ```cmd
+   ```
    cutechess-cli --help
    ```
-   
-### MacOS
