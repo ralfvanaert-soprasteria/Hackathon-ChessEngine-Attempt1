@@ -17,7 +17,6 @@ public class Search {
 
     private long startTime;
     private SearchSetting setting;
-    private final Random rng = new Random();
 
     private final Evaluator evaluator;
     private final MoveOrderer moveOrderer;
