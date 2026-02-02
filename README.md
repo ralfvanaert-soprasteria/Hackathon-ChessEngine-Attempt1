@@ -73,7 +73,7 @@ To participate in the hackathon, you need to fork this repository and push your 
 Executables can be found in the `test-sprt/builds` directory.
 
 Picking the right one for your OS:
-- Windows: `test-sprt/builds/windows/cutechess-cli.exe`
+- Windows: `test-sprt/builds/windows_x86_64/cutechess-cli.zip` for 64-bit
 - Linux, depends on architecture (run `uname -m`)
   - `test-sprt/builds/linux_x86_64/cutechess-cli` for x86_64
 - MacOS, depends on architecture (run `uname -m`)
@@ -97,12 +97,11 @@ Picking the right one for your OS:
    ```
 
 ### Windows
-1. Place the `cutechess-cli.exe` file in a directory of your choice. For example in `C:/Program Files/cutechess-cli/`.
-2. Add the directory to PATH environment variable:
-   - Add the path to the directory where you placed `cutechess-cli.exe`.
-3. **Verify the Installation**
-   ```
-   cutechess-cli --help
+1. Unzip the `cutechess-cli.zip` file in test-sprt/builds/windows_x86_64/. 
+    <br/>Note: the extract locations should be there too.
+3. **Verify the Installation**, for example in PowerShell:
+   ```powershell
+   ./test-sprt/builds/windows_x86_64/cutechess-cli --help
    ```
    
 ## Usage
