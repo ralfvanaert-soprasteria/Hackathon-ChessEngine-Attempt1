@@ -75,9 +75,9 @@ Executables can be found in the `test-sprt/builds` directory.
 Picking the right one for your OS:
 - Windows: `test-sprt/builds/windows/cutechess-cli.exe`
 - Linux, depends on architecture (run `uname -m`)
-  - `test-sprt/builds/linux/cutechess-cli-x86_64` for x86_64
+  - `test-sprt/builds/linux_x86_64/cutechess-cli` for x86_64
 - MacOS, depends on architecture (run `uname -m`)
-  - `test-sprt/builds/macos/cutechess-cli-arm64` for arm64 (M1/M2)
+  - `test-sprt/builds/macos_arm64/cutechess-cli` for arm64 (M1/M2)
 
 ### Linux & MacOS
 1. 
