@@ -69,53 +69,33 @@ To participate in the hackathon, you need to fork this repository and push your 
    mvn install
    ```
 
-## Cutechess-cli
-Executables can be found in the `test-sprt/builds` directory.
+# Development
 
-Picking the right one for your OS:
-- Windows: `test-sprt/builds/windows_x86_64/cutechess-cli.zip` for 64-bit
-- Linux, depends on architecture (run `uname -m`)
-  - `test-sprt/builds/linux_x86_64/cutechess-cli` for x86_64
-- MacOS, depends on architecture (run `uname -m`)
-  - `test-sprt/builds/macos_arm64/cutechess-cli` for arm64 (M1/M2)
 
-### Linux & MacOS
-1. 
-   Ensure the `cutechess-cli` is executable. Run:
-   ```
-   chmod +x cutechess-cli
-   ```
+## SPRT testing
+Sequential Probability Ratio Testing (SPRT) is a statistical test method to compare two versions of a chess engine to determine if one is significantly better than the other.
+In english: test if your changes improved the engine or not.
+It runs games between base and new version until conclusion is reached.
 
-2. Move the file to a directory in your PATH
-   ```
-   sudo mv cutechess-cli /usr/local/bin/
-   ```
+### Using SPRT tests
+To run the SPRT tests, first build the engine jar you want to test. 
+Make sure both base and new version jars are in the `test-sprt/engines` directory.
+Then run the docker compose setup to execute the tests. 
+By default it will run the test_sprt.sh script with '1.0' as base version and '1.0-SNAPSHOT' as new version. 
+If you built different versions, change the parameters accordingly in the docker-compose.yml file. Also see `test-sprt/test_sprt.sh` for details.
 
-3. **Verify the Installation**
-   ```
-   cutechess-cli --help
-   ```
-
-### Windows
-1. Unzip the `cutechess-cli.zip` file in test-sprt/builds/windows_x86_64/. 
-    <br/>Note: the extract locations should be there too.
-3. **Verify the Installation**, for example in PowerShell:
-   ```powershell
-   ./test-sprt/builds/windows_x86_64/cutechess-cli --help
-   ```
-   
-## Usage
-To run your chess engine separately, run the jar:
+Rebuild image to pick up the engines:
+```shell
+docker compose up --build
 ```
-java -jar Hackathon-ChessEngine-<version>.jar
-```
-
-### SPRT testing
-To run the sprt tests, run in `test-sprt` directory:
-```
-./test_sprt.sh <base_version> <new_version>
-```
-See `test-sprt/test_sprt.sh` for more details. Results of SPRT:
 - H0 accepted: The new version is not better than the base version.
 - H1 accepted: The new version is better than the base version.
 - LOS: Likelihood of superiority of new over base version.
+
+#### test_sprt.sh parameters
+The docker image runs the `test_sprt.sh` as entrypoint with 3 parameters:
+- $1: Base engine version (tag of the jar without .jar, f.e. '1.0')
+- $2: New engine version (see above)
+- $3: sprt_presets.ini preset name (default: 'default')
+
+In the docker-compose.yml file you can change these parameters.
