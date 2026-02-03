@@ -49,8 +49,8 @@ public class Uci {
 
         switch (line) {
             case "uci": {
-                sendCommand("id name KnightClubbing");
-                sendCommand("id author Ralf van Aert");
+                sendCommand("id name Hackathon Chess Engine");
+                sendCommand("id author John Doe");
                 sendCommand("uciok");
                 break;
             }
@@ -151,6 +151,7 @@ public class Uci {
 
         searchThread = new Thread(() -> {
             String move = "";
+            SearchResult resultMove = null;
             try {
                 int moveTime;
                 if (time > 0) {
@@ -160,6 +161,7 @@ public class Uci {
                     moveTime = 60000; // 60 seconds default
                 }
                 SearchResult result = search.bestMove(board, new SearchSetting(depth, moveTime));
+                resultMove = result;
                 move = result.getBestMove();
             } catch (Throwable t) {
                 t.printStackTrace();
@@ -176,6 +178,7 @@ public class Uci {
                 }
             } finally {
                 if (move != null && !move.isEmpty()) {
+                    sendCommand("info depth" + resultMove.getDepth() + " score cp " + resultMove.getScore() + " time " + resultMove.getTimeTakenMillis());
                     sendCommand("bestmove " + move);
                 } else {
                     BMove[] someMoves = new MoveGenerator(board).generateMoves(false);

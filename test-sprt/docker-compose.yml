@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  test-sprt:
+    image: test-sprt:latest
+    deploy:
+      resources:
+        limits:
+          cpus: '10.0'
+          memory: 8g
+    command: ["1.0", "1.0-SNAPSHOT"]

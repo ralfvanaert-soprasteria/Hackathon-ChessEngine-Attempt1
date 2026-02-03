@@ -45,7 +45,7 @@ fi
 echo "Running SPRT with preset: $PRESET"
 echo "Time control: $TC, Games: $GAMES, Concurrency: $CONCURRENCY"
 
-cutechess-cli \
+./cutechess-cli \
   -event "Hackathon SPRT $INPUT_ARG1 vs $INPUT_ARG2" \
   -engine cmd=java arg=-jar arg="$ENGINE2" proto=uci name="Engine_change_v$INPUT_ARG2" \
   -engine cmd=java arg=-jar arg="$ENGINE1" proto=uci name="Engine_base_v$INPUT_ARG1" \
