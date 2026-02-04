@@ -24,23 +24,9 @@ You have absolute freedom to modify and improve the chess engine in any way you 
 Restrictions:
 - Must be based on this codebase (java 17, maven).
 - Must be single threaded: no threads created or parallelism.
-- No external sources allowed, including API's, pre-trained models, developed engines, etc.
-
-Suggestive restrictions:
-- No opening books. Games will be played from 8 moves deep.
-- No endgame tablebases. Implementation too risky and potentially too time consuming for pay-off. 
-
-Suggestions:
-- Focus on search, ordering and evaluation improvements.
-- Try to keep the engine fast and lightweight. 
-  - Any millisecond spent is time not spent searching deeper and finding the better move.
-  - Avoid (heavy) complex data structures.
-  - Assume input is always valid, avoid unnecessary checks.
-- SPRT-test often, after every change.
-  - Changed a parameter? Test it!
-  - Changed a line? Test it!
-  - Reoredered functions? Test it!
-- Have fun and be creative!
+- No external sources allowed, including API's, pre-trained models, developed engines, etc. 
+ 
+Have fun and be creative!
 
 # Setup
 Everything to develop this chess engine.
@@ -136,7 +122,7 @@ It runs games between base and new version until conclusion is reached.
 To run the SPRT tests, first build the engine jar you want to test. 
 Make sure both base and new version jars are in the `test-sprt/engines` directory.
 Then run the docker compose setup to execute the tests. 
-By default it will run the test_sprt.sh script with '1.0' as base version and '1.0-SNAPSHOT' as new version. 
+By default it will run the test_sprt.sh script with '1.0' as base version and '1.0-SNAPSHOT' as new version.
 If you built different versions, change the parameters accordingly in the docker-compose.yml file. Also see `test-sprt/test_sprt.sh` for details.
 
 Rebuild image to pick up the engines:
