@@ -2,12 +2,12 @@
 
 A chess engine to be developed during a hackathon.
 <br/>
-For competing, fork this repository. Please refer to the [Competing with the Engine](#competing-with-the-engine) section.
+For competing, fork this repository. Please refer to the [Repository use for hackathon](#repository-use-for-hackathon) section.
 
 <!-- TOC -->
 * [Scope of Hackathon](#scope-of-hackathon)
 * [Setup](#setup)
-  * [Competing with the Engine](#competing-with-the-engine)
+  * [Repository use for hackathon](#repository-use-for-hackathon)
   * [KnightClubbingLogic](#knightclubbinglogic)
 * [Development](#development)
   * [Restrictions and guidelines](#restrictions-and-guidelines)
@@ -19,7 +19,7 @@ For competing, fork this repository. Please refer to the [Competing with the Eng
 <!-- TOC -->
 
 # Scope of Hackathon
-You have absolute freedom to modify and improve the chess engine in any way you see fit, but there are some restrictions and suggestions.
+You have absolute freedom to modify and improve the chess engine in any way you see fit, but there are some restrictions.
 
 Restrictions:
 - Must be based on this codebase (java 17, maven).
@@ -40,7 +40,7 @@ Setup includes:
 - KnightClubbingLogic maven dependency
 - Cutechess-cli installation
 - 
-## Competing with the Engine
+## Repository use for hackathon
 To participate in the hackathon, you need to fork this repository and push your changes to your fork.
 1. Fork this repository on GitHub.
 2. Clone your forked repository.
@@ -54,20 +54,22 @@ To participate in the hackathon, you need to fork this repository and push your 
    ```
 2. Navigate to the project directory and maven install:
    ```
-   cd Hackathon-ChessEngine
+   cd KnightClubbingLogic
    mvn install
    ```
 
 # Development
 The goal of this hackathon is to learn chess engine development and have fun improving the engine. 
 ## Restrictions and guidelines
+To keep the challenge managable and learnable, there are some guidelines and soft restrictions.
+Guidelines to help you choose what to implement and in which order
 ### Guidelines
 To guide you through the development, here are some key points.
 - **ALWAYS TEST YOUR CHANGES WITH SPRT TESTS!**
     - Small changes can have big impact.
     - Test often, after every change.
     - It's rewarding!
-- From basics to details.
+- From basics to details. First settle basics before touching details.
   - **Basics:** Start with implementing better evaluation and move ordering.
     - PST eval. (Piece Square Tables)
     - Material eval.
