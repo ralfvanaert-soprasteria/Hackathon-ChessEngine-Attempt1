@@ -8,8 +8,6 @@ import sopra.steria.evaluation.Evaluator;
 import sopra.steria.ordering.BadMoveOrderer;
 import sopra.steria.ordering.MoveOrderer;
 
-import java.util.Random;
-
 import static sopra.steria.EngineConst.INF;
 import static sopra.steria.EngineConst.MATE_SCORE;
 
@@ -81,6 +79,10 @@ public class Search {
                 return -MATE_SCORE + ply;
             else
                 return 0;
+        }
+
+        if (board.isDrawByRepetition()) {
+            return 0;
         }
 
         for (BMove move : nextMoves) {
