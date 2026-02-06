@@ -155,8 +155,7 @@ public class Uci {
             try {
                 int moveTime;
                 if (time > 0) {
-                    moveTime = Math.min(time / 30 + inc, time / 2);
-                    moveTime = Math.max(10, Math.min(moveTime, time - 10));
+                    moveTime = calcMoveTime(time, inc);
                 } else {
                     moveTime = 60000; // 60 seconds default
                 }
@@ -195,6 +194,10 @@ public class Uci {
 
 
         searchThread.start();
+    }
+
+    private static int calcMoveTime(int time, int inc) {
+        return Math.max(50, Math.min(time / 20 + inc, time - 20));
     }
 
     int calculateDepth(int time, int increment) {
