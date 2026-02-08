@@ -61,12 +61,8 @@ public class Search {
     }
 
     private int negamax(BBoard board, int depth, int alpha, int beta, int ply) {
-        if (shouldStop()) {
-            return 0;
-        }
-
-        if (depth <= 0)
-            return evaluator.evaluate(board);
+        if (shouldStop())  return 0;
+        if (depth <= 0) return evaluator.evaluate(board);
 
         int bestScore = -INF;
 
