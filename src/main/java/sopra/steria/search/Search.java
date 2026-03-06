@@ -13,8 +13,10 @@ import static sopra.steria.EngineConst.MATE_SCORE;
 
 public class Search {
 
+    private volatile boolean stop;
     private long startTime;
     private SearchSetting setting;
+    private long nodes;
 
     private final Evaluator evaluator;
     private final MoveOrderer moveOrderer;
@@ -27,40 +29,59 @@ public class Search {
     public SearchResult bestMove(BBoard board, SearchSetting setting) {
         this.startTime = System.currentTimeMillis();
         this.setting = setting;
+        this.stop = false;
 
-        SearchResult result = new SearchResult();
-        result.setScore(-INF);
-
-        int alpha = -INF;
-        int beta = INF;
+        SearchResult bestResult = new SearchResult();
+        bestResult.setScore(-INF);
 
         for (int depth = 1; depth <= setting.maxDepth(); depth++) {
+            SearchResult result = searchDepth(board, depth);
+
             if (shouldStop()) break;
 
-            BMove[] moves = new MoveGenerator(board).generateMoves(false);
+            bestResult = result;
 
-            moveOrderer.orderMoves(moves, board);
+            long elapsed = getTimeTakenMillis();
+            String pv = result.getBestMove() != null ? result.getBestMove() : "";
+            System.out.println("info depth " + depth + " score cp " + result.getScore() + " time " + elapsed + " pv " + pv);
 
-            for (BMove move : moves) {
-                if (shouldStop()) break;
-
-                board.makeMove(move, true);
-                int score = -negamax(board, depth - 1, -beta, -alpha, 1);
-                board.undoMove(move, true);
-
-                if (score > result.getScore()) {
-                    result.setScore(score);
-                    result.setBestMove(move.getUci());
-                }
-
-                alpha = Math.max(alpha, score);
-            }
+            if (isDecisive(result)) break;
         }
 
-        return result;
+        return bestResult;
+    }
+
+    private SearchResult searchDepth(BBoard board, int depth) {
+        SearchResult bestResult = new SearchResult();
+        bestResult.setScore(-INF);
+        int alpha = -INF;
+        int beta = INF;
+        this.nodes = 0;
+
+        BMove[] moves = new MoveGenerator(board).generateMoves(false);
+
+        for (BMove move : moves) {
+            if (shouldStop()) break;
+
+            board.makeMove(move, true);
+            int score = -negamax(board, depth - 1, -beta, -alpha, 1);
+            board.undoMove(move, true);
+
+            if (score > bestResult.getScore()) {
+                bestResult.setScore(score);
+                bestResult.setBestMove(move.getUci());
+            }
+
+            alpha = Math.max(alpha, score);
+        }
+
+        bestResult.setNodesSearched(this.nodes);
+        return bestResult;
     }
 
     private int negamax(BBoard board, int depth, int alpha, int beta, int ply) {
+        nodes++;
+
         if (shouldStop())  return 0;
         if (depth <= 0) return evaluator.evaluate(board);
 
@@ -97,7 +118,17 @@ public class Search {
         return bestScore;
     }
 
+    private boolean isDecisive(SearchResult result) {
+        return Math.abs(result.getScore()) >= MATE_SCORE - setting.maxDepth();
+    }
+
+    private long getTimeTakenMillis() {
+        return System.currentTimeMillis() - startTime;
+    }
+
     private boolean shouldStop() {
-        return System.currentTimeMillis() - startTime >= setting.timeLimit();
+        if (stop) return true;
+        stop = setting.timeLimit() > 0 && getTimeTakenMillis() >= setting.timeLimit();
+        return stop;
     }
 }
