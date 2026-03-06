@@ -9,4 +9,6 @@ services:
         limits:
           cpus: '10.0'
           memory: 8g
+    volumes:
+      - ./output:/app/output
     command: ["1.0", "1.0-SNAPSHOT"] # Parameters for test_sprt.sh

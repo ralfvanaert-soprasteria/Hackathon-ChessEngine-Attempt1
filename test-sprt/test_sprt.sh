@@ -14,7 +14,7 @@ PRESET=${3:-"default"}  # (Opt) preset name from sprt_presets.ini
 WORK_DIR=$(pwd)
 ENGINE1="$WORK_DIR/engines/Hackathon-ChessEngine-$INPUT_ARG1.jar"
 ENGINE2="$WORK_DIR/engines/Hackathon-ChessEngine-$INPUT_ARG2.jar"
-PGNOUT="$WORK_DIR/games.pgn"
+PGNOUT="$WORK_DIR/output/games.pgn"
 CONFIG_FILE="$WORK_DIR/sprt_presets.ini"
 
 [[ -f "$ENGINE1" ]] && echo "✓ Engine 1 found" || { echo "✗ Engine 1 missing: $ENGINE1"; exit 1; }
