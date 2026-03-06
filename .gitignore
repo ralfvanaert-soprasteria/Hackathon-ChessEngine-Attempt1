@@ -93,3 +93,4 @@ test-sprt/games.pgn
 *.jar
 /dependency-reduced-pom.xml
 /test-sprt/config.json
+/test-sprt/output/games.pgn
