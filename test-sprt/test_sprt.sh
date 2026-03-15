@@ -7,7 +7,7 @@
 
 INPUT_ARG1="$1"         # Base version
 INPUT_ARG2="$2"         # Changed version
-PRESET=${3:-"default"}  # (Opt) preset name from sprt_presets.ini
+PRESET=${3:-"fast"}  # (Opt) preset name from sprt_presets.ini
 
 # Example of use of preset: ./test_sprt.sh <base_version> <changed_version> <preset_name>
 

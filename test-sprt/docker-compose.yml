@@ -11,4 +11,4 @@ services:
           memory: 8g
     volumes:
       - ./output:/app/output
-    command: ["1.0", "1.0-SNAPSHOT"] # Parameters for test_sprt.sh
+    command: ["1.0", "1.0-SNAPSHOT", "fast"] # Parameters for test_sprt.sh
