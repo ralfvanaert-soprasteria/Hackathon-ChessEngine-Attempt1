@@ -4,7 +4,7 @@
   <groupId>sopra.steria</groupId>
   <artifactId>Hackathon-ChessEngine</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <name>Hackathon-ChessEngine</name>
   <url>http://maven.apache.org</url>
   <dependencies>

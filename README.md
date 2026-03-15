@@ -35,11 +35,6 @@ Prerequisites:
 - Maven
 - Git
 
-Setup includes:
-- Competing setup
-- KnightClubbingLogic maven dependency
-- Cutechess-cli installation
-- 
 ## Repository use for hackathon
 To participate in the hackathon, you need to fork this repository and push your changes to your fork.
 1. Fork this repository on GitHub.
@@ -48,15 +43,33 @@ To participate in the hackathon, you need to fork this repository and push your 
 4. Create a pull request to the original repository before the deadline.
 
 ## KnightClubbingLogic
-1. Clone the repository:
-   ```
-   git clone
-   ```
+1. Clone the [repository](https://github.com/rpjvanaert/KnightClubbingLogic#)
 2. Navigate to the project directory and maven install:
    ```
    cd KnightClubbingLogic
    mvn install
    ```
+   
+## Fork this repository
+1. Fork this [repository](https://github.com/rpjvanaert/Hackathon-ChessEngine#).
+2. Clone it to your local machine.
+3. Navigate to the project directory and maven package:
+   ```
+   cd Hackathon-ChessEngine
+   mvn package
+   ```
+   If it runs successfully, you have a starting point.
+
+## Build base version
+1. Build the base version jar and place it in the `test-sprt/engines` directory.
+   ```
+   mvn package
+   cp target/Hackathon-ChessEngine-1.0.jar test-sprt/engines/1.0.jar
+   ```
+   
+## Turning in your work
+To turn in your work, create a pull request to the original repository before the deadline.
+Make sure to include a description of your changes and improvements in the pull request.
 
 # Development
 The goal of this hackathon is to learn chess engine development and have fun improving the engine. 
@@ -65,55 +78,13 @@ To keep the challenge managable and learnable, there are some guidelines and sof
 Guidelines to help you choose what to implement and in which order
 ### Guidelines
 To guide you through the development, here are some key points.
-- **ALWAYS TEST YOUR CHANGES WITH SPRT TESTS!**
-    - Small changes can have big impact.
-    - Test often, after every change.
-    - It's rewarding!
-- From basics to details. First settle basics before touching details.
-  - **Basics:** Start with implementing better evaluation and move ordering.
-    - PST eval. (Piece Square Tables)
-    - Material eval.
-    - Other (opt.) eval. improvements
-      - King safety
-      - Pawn structure
-      - etc.
-    - MVV-LVA
-    - Other (opt.) basic move ordering
-      - Captures
-      - Checks
-  - **Detail:** Upgrade search into iterative deepening
-    - Iterative deepening search
-    - Killer moves
-    - Transposition table
-  - **Other details:** Other notable techniques
-    - Search extensions
-    - Late move reductions (LMR)
-    - Quiescence search
+- todo
 - Search for sources.
   - Google or DuckDuckGo are your best friends ;)
     - Don't copy-paste, understand.
     - Don't let LLMs generate it, at best use them to understand.
   - [Chess Programming Wiki](https://www.chessprogramming.org/Main_Page)
   - [Sebasian Lague's Chess Engine Video's (Episode 1 & 2)](https://www.youtube.com/watch?v=U4ogK0MIzqk&list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c)
-
-### Soft restrictions
-As stated before, besides the hard restrictions, you have absolute freedom to modify and improve the chess engine in any way you see fit.
-I do have some soft restrictions, with the intention to keep the challenge doable and fun, reasoning is more important than the actual restriction:
-- Single threaded (although also hard restriction, reasoning important)
-  - Explanation: no threads created or parallelism. 
-  - Reasoning: multi-threading adds a lot of complexity (race conditions, locks, etc.). Not needed to understand chess engines.
-- Traditional search (No MCTS)
-  - Explanation: Limit to minimax-like search: minimax, negamax, iterative deepening.
-  - Reasoning: To keep things simple. Monte Carlo Tree Search is too (mathematically) complex for this hackathon.
-- No books or tablebases
-  - Explanation: No opening books or endgame tablebases.
-  - Reasoning: Implementation gain not worth cost (risk & time). Also, not needed to understand chess engines. On top of that, competition will be SPRT-test from move 8.
-- No external sources
-  - Explantion: No external APIs, pre-trained models, chess engines, etc.
-  - Reasoning: To keep the challenge fair and fun. Focus on your own improvements and lessons.
-- No modifications to SPRT testing setup
-  - Explanation: No changes to the SPRT testing setup.
-  - Reasoning: To keep things simple, time of adjustments to testing setup are not worth the gain.
 
 ## SPRT testing
 Sequential Probability Ratio Testing (SPRT) is a statistical test method to compare two versions of a chess engine to determine if one is significantly better than the other.
