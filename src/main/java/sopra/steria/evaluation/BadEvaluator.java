@@ -1,17 +1,22 @@
 package sopra.steria.evaluation;
 
 import knight.clubbing.core.BBoard;
+import knight.clubbing.core.BBoardHelper;
 import knight.clubbing.core.BPiece;
+import knight.clubbing.core.PopLsbResult;
 
 public class BadEvaluator implements Evaluator {
     private static final int PIECE_VALUE = 100;
 
     @Override
     public int evaluate(BBoard board) {
-        // Me counts material
-        int white = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.white));
-        int black = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.white));
+        int score = 0;
 
-        return white - black;
+        // Me take opponent material good
+        int whiteMaterial = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.white));
+        int blackMaterial = PIECE_VALUE * Long.bitCount(board.getColorBitboard(BPiece.black));
+        score += (int) (whiteMaterial * 0.5 - blackMaterial);
+
+        return board.isWhiteToMove() ? score : -score;
     }
 }
