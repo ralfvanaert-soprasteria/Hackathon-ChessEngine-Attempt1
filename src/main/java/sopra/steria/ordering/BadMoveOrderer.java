@@ -1,6 +1,7 @@
 package sopra.steria.ordering;
 
 import knight.clubbing.core.BBoard;
+import knight.clubbing.core.BBoardHelper;
 import knight.clubbing.core.BMove;
 import knight.clubbing.core.BPiece;
 
@@ -19,26 +20,18 @@ public class BadMoveOrderer implements MoveOrderer {
 
     private int score(BMove move, BBoard board) {
         int score = 0;
+
         int movingPiece = board.getPieceBoards()[move.startSquare()];
-        int victimPiece = board.getPieceBoards()[move.targetSquare()];
+
+        int rank = BBoardHelper.rankIndex(move.startSquare());
 
         // Oooh me move knight!
         if (BPiece.getPieceType(movingPiece) == BPiece.knight)
-            score += 1000;
+            score += 500;
 
-        switch(BPiece.getPieceType(victimPiece)) {
-            case BPiece.queen:
-                score += 900; // Oooh me queen!
-                break;
-            case BPiece.rook:
-                score += 500; // Oooh juicy rook!
-                break;
-            case BPiece.none:
-                break;
-            default:
-                score += 100; // Take take take!
-                break;
-        }
+        // Me want to move forward!
+        if (board.isWhiteToMove() && rank == 5 || !board.isWhiteToMove() && rank == 2)
+            score += 250;
 
         return score;
     }
