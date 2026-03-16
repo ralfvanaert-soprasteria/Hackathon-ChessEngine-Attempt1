@@ -1,7 +1,9 @@
 package sopra.steria.evaluation;
 
 import knight.clubbing.core.BBoard;
+import knight.clubbing.core.BBoardHelper;
 import knight.clubbing.core.BPiece;
+import knight.clubbing.core.PopLsbResult;
 
 public class BadEvaluator implements Evaluator {
     private static final int PIECE_VALUE = 100;
