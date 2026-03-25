@@ -102,6 +102,10 @@ Rebuild image to pick up the engines:
 ```shell
 docker compose up --build
 ```
+of Podman:
+```shell
+podman compose up --build
+```
 - H0 accepted: The new version is not better than the base version.
 - H1 accepted: The new version is better than the base version.
 - LOS: Likelihood of superiority of new over base version.
