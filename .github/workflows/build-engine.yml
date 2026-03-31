@@ -1,0 +1,42 @@
+name: Build Chess Engine
+
+on:
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Checkout and build KnightClubbingLogic dependency
+        run: |
+          cd ..
+          git clone https://github.com/rpjvanaert/KnightClubbingLogic.git
+          cd KnightClubbingLogic
+          mvn clean install -DskipTests
+
+      - name: Build Chess Engine
+        run: mvn clean package
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chess-engine-${{ github.event.pull_request.number || github.sha }}
+          path: target/Hackathon-ChessEngine-*.jar
+          retention-days: 30
+
+      - name: Verify JAR was created
+        run: |
+          ls -lh target/*.jar
+          echo "Engine built successfully!"
