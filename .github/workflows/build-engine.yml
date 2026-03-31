@@ -29,10 +29,22 @@ jobs:
       - name: Build Chess Engine
         run: mvn clean package
 
+      - name: Sanitize PR title for artifact name
+        id: sanitize
+        run: |
+          # Get PR title and sanitize it (remove special chars, replace spaces with hyphens)
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          SANITIZED=$(echo "$PR_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')
+          # Limit length to 50 chars
+          SANITIZED=${SANITIZED:0:50}
+          echo "name=$SANITIZED" >> $GITHUB_OUTPUT
+          echo "Sanitized name: $SANITIZED"
+
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
+        id: artifact-upload
         with:
-          name: chess-engine-${{ github.event.pull_request.number || github.sha }}
+          name: ${{ steps.sanitize.outputs.name }}
           path: target/Hackathon-ChessEngine-*.jar
           retention-days: 30
 
@@ -40,3 +52,33 @@ jobs:
         run: |
           ls -lh target/*.jar
           echo "Engine built successfully!"
+
+      - name: Comment on PR with artifact link
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const runId = context.runId;
+            const repo = context.repo;
+            const artifactName = '${{ steps.sanitize.outputs.name }}';
+            
+            const comment = `## ✅ Chess Engine Built Successfully!
+            
+            Your engine has been compiled and is ready for testing.
+            
+            ### Download your JAR:
+            **Artifact Name:** \`${artifactName}\`
+            
+            **Direct Link:** [Click here to download](https://github.com/${repo.owner}/${repo.repo}/actions/runs/${runId})
+            
+            Then click on the artifact name at the bottom of the page to download.
+            
+            ---
+            <sub>Build: ${runId} | Commit: ${context.sha.substring(0, 7)}</sub>`;
+            
+            github.rest.issues.createComment({
+              owner: repo.owner,
+              repo: repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
