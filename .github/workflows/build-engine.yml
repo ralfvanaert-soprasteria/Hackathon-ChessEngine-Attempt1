@@ -46,11 +46,24 @@ jobs:
           echo "name=$SANITIZED" >> $GITHUB_OUTPUT
           echo "Sanitized name: $SANITIZED"
 
-      - name: Upload JAR artifact
+      - name: Upload to transfer.sh for direct download
+        id: transfer
+        run: |
+          JAR_FILE=$(ls target/Hackathon-ChessEngine-*.jar | head -n 1)
+          CLEAN_NAME="engine-${{ steps.sanitize.outputs.name }}.jar"
+          
+          # Upload to transfer.sh and capture the URL
+          DOWNLOAD_URL=$(curl --upload-file "$JAR_FILE" "https://transfer.sh/$CLEAN_NAME")
+          
+          echo "url=$DOWNLOAD_URL" >> $GITHUB_OUTPUT
+          echo "filename=$CLEAN_NAME" >> $GITHUB_OUTPUT
+          echo "Direct download URL: $DOWNLOAD_URL"
+
+      - name: Upload JAR artifact (backup)
         uses: actions/upload-artifact@v4
         id: artifact-upload
         with:
-          name: ${{ steps.sanitize.outputs.name }}
+          name: hackathon-engine_${{ steps.sanitize.outputs.name }}
           path: target/Hackathon-ChessEngine-*.jar
           retention-days: 30
 
@@ -59,25 +72,30 @@ jobs:
           ls -lh target/*.jar
           echo "Engine built successfully!"
 
-      - name: Comment on PR with artifact link
+      - name: Comment on PR with download links
         uses: actions/github-script@v7
         with:
           script: |
             const prNumber = context.issue.number;
             const runId = context.runId;
             const repo = context.repo;
-            const artifactName = '${{ steps.sanitize.outputs.name }}';
+            const artifactName = 'engine-${{ steps.sanitize.outputs.name }}';
+            const downloadUrl = '${{ steps.transfer.outputs.url }}';
+            const filename = '${{ steps.transfer.outputs.filename }}';
             
-            const comment = `## ✅ Chess Engine Built Successfully!
+            const comment = `##Chess Engine Built Successfully!
             
             Your engine has been compiled and is ready for testing.
             
-            ### Download your JAR:
-            **Artifact Name:** \`${artifactName}\`
+            ### Download:
+            **[Click here to download ${filename}](${downloadUrl})**
             
-            **Direct Link:** [Click here to download](https://github.com/${repo.owner}/${repo.repo}/actions/runs/${runId})
+            _Link expires in 14 days. File hosted on transfer.sh_
             
-            Then click on the artifact name at the bottom of the page to download.
+            ### Alternative Download (GitHub Artifacts):
+            If the direct link doesn't work, you can download from [GitHub Actions artifacts](https://github.com/${repo.owner}/${repo.repo}/actions/runs/${runId})
+            
+            Look for the artifact named: \`${artifactName}\`
             
             ---
             <sub>Build: ${runId} | Commit: ${context.sha.substring(0, 7)}</sub>`;
