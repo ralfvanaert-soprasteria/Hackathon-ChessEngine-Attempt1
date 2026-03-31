@@ -8,6 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Add these permissions to allow commenting on PRs
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
     steps:
       - name: Checkout PR code
         uses: actions/checkout@v4
