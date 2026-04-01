@@ -93,7 +93,7 @@ jobs:
             const artifactName = 'hackathon-engine_${{ steps.sanitize.outputs.name }}';
             const artifactUrl = '${{ steps.artifact-link.outputs.url }}';
             
-            const comment = `##Chess Engine Built Successfully!
+            const comment = `## Chess Engine Built Successfully!
             
             Your engine has been compiled and is ready for testing.
             
