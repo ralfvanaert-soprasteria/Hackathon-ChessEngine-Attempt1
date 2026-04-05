@@ -111,8 +111,8 @@ public class UciSanityTest {
         uci.handleCommand("uci");
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
-        uci.handleCommand("go wtime 1000 btime 1000");
-        Thread.sleep(300);
+        uci.handleCommand("go depth 2");
+        Thread.sleep(50);
 
         String output = outContent.toString();
 
@@ -121,7 +121,7 @@ public class UciSanityTest {
         assertTrue(output.contains("readyok"), "Engine should respond with readyok");
         assertNotNull(uci.getBoard(), "Board should be initialized");
         assertFalse(uci.getBoard().isWhiteToMove(), "Black should be to move");
-        assertTrue(output.contains("info depth"));
-        assertTrue(output.contains("bestmove"));
+        assertTrue(output.contains("info depth"), "Expected \"info depth\", but got:\n" + output);
+        assertTrue(output.contains("bestmove"), "Expected \"bestmove\", but got:\n" + output);
     }
 }

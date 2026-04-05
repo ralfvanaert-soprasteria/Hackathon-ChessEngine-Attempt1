@@ -177,7 +177,7 @@ public class Uci {
                 }
             } finally {
                 if (move != null && !move.isEmpty()) {
-                    sendCommand("info depth" + resultMove.getDepth() + " score cp " + resultMove.getScore() + " time " + resultMove.getTimeTakenMillis());
+                    sendCommand("info depth " + resultMove.getDepth() + " score cp " + resultMove.getScore() + " time " + resultMove.getTimeTakenMillis());
                     sendCommand("bestmove " + move);
                 } else {
                     BMove[] someMoves = new MoveGenerator(board).generateMoves(false);
