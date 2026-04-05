@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.Duration;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UciSanityTest {
@@ -112,7 +114,15 @@ public class UciSanityTest {
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
         uci.handleCommand("go depth 2");
-        Thread.sleep(500);
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(50))
+                .untilAsserted(() -> {
+                    String output = outContent.toString();
+                    assertTrue(output.contains("info depth"));
+                    assertTrue(output.contains("bestmove"));
+                });
 
         String output = outContent.toString();
 
