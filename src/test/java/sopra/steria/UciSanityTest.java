@@ -112,7 +112,7 @@ public class UciSanityTest {
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
         uci.handleCommand("go depth 2");
-        Thread.sleep(50);
+        Thread.sleep(500);
 
         String output = outContent.toString();
 
