@@ -28,6 +28,15 @@ public class Uci {
     private BBoard board;
     private Thread searchThread;
     private Search search;
+    private boolean enableLogging;
+
+    public Uci(boolean enableLogging) {
+        this.enableLogging = enableLogging;
+    }
+
+    public Uci() {
+        this(true);
+    }
 
     protected BBoard getBoard() {
         return board;
@@ -83,6 +92,8 @@ public class Uci {
     }
 
     private void logText(String text, String location) {
+        if (!enableLogging) return;
+
         try (PrintWriter log = new PrintWriter(new FileWriter(location, true))) {
             log.println(text);
         } catch (IOException e) {

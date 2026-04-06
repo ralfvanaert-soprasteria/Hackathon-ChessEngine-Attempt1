@@ -19,7 +19,7 @@ public class UciSanityTest {
 
     @BeforeEach
     void setUp() {
-        uci = new Uci();
+        uci = new Uci(false);
         outContent = new ByteArrayOutputStream();
         originalOut = System.out;
         System.setOut(new PrintStream(outContent));
