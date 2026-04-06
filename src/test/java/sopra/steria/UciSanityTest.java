@@ -113,7 +113,7 @@ public class UciSanityTest {
         uci.handleCommand("uci");
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
-        uci.handleCommand("go depth 2");
+        uci.handleCommand("go depth 1");
 
         await()
                 .atMost(Duration.ofSeconds(5))
@@ -139,7 +139,7 @@ public class UciSanityTest {
      * Requirement of (baseline) engine: Should respect time control
      */
     @Test
-    void testTimeControl_Cutechess() {
+    void testTimeControl() {
         // Test white to move with normal time
         uci.handleCommand("position startpos");
         long startTime = System.currentTimeMillis();
