@@ -113,19 +113,45 @@ public class UciSanityTest {
         uci.handleCommand("uci");
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
+
+        long startTime = System.currentTimeMillis();
         uci.handleCommand("go depth 1");
 
-        await()
-                .atMost(Duration.ofSeconds(5))
-                .pollInterval(Duration.ofMillis(50))
-                .untilAsserted(() -> {
-                    String output = outContent.toString();
-                    assertTrue(output.contains("info depth"));
-                    assertTrue(output.contains("bestmove"));
-                });
+        try {
+            await()
+                    .atMost(Duration.ofSeconds(5))
+                    .pollInterval(Duration.ofMillis(50))
+                    .untilAsserted(() -> {
+                        String output = outContent.toString();
+                        assertTrue(output.contains("info depth"),
+                                "Missing 'info depth'. Current output:\n" + output);
+                        assertTrue(output.contains("bestmove"),
+                                "Missing 'bestmove'. Current output:\n" + output);
+                    });
+        } catch (Exception e) {
+            long elapsed = System.currentTimeMillis() - startTime;
+            String currentOutput = outContent.toString();
+
+            System.err.println("=== TEST FAILURE DEBUG INFO ===");
+            System.err.println("Time elapsed: " + elapsed + "ms");
+            System.err.println("Current output length: " + currentOutput.length());
+            System.err.println("Full output:\n" + currentOutput);
+            System.err.println("Board state: " + (uci.getBoard() != null ? uci.getBoard().exportFen() : "null"));
+            System.err.println("=== THREAD STATE ===");
+            Thread.getAllStackTraces().forEach((thread, stackTrace) -> {
+                if (thread.getName().contains("Thread") || thread.getName().contains("search")) {
+                    System.err.println("Thread: " + thread.getName() + " - State: " + thread.getState());
+                    for (StackTraceElement element : stackTrace) {
+                        System.err.println("  at " + element);
+                    }
+                }
+            });
+            System.err.println("================================");
+
+            throw e;
+        }
 
         String output = outContent.toString();
-
         assertTrue(output.contains("id name"), "Engine should identify itself");
         assertTrue(output.contains("uciok"), "Engine should respond with uciok");
         assertTrue(output.contains("readyok"), "Engine should respond with readyok");
@@ -134,6 +160,7 @@ public class UciSanityTest {
         assertTrue(output.contains("info depth"), "Expected \"info depth\", but got:\n" + output);
         assertTrue(output.contains("bestmove"), "Expected \"bestmove\", but got:\n" + output);
     }
+
 
     /**
      * Requirement of (baseline) engine: Should respect time control
