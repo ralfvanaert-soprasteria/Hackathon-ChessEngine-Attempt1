@@ -109,7 +109,7 @@ public class UciSanityTest {
      * Requirement of (baseline) engine: UCI should work with standard procedure including go
      */
     @Test
-    void testStartProcedure_withGo() throws InterruptedException {
+    void testStartProcedure_withGo() {
         uci.handleCommand("uci");
         uci.handleCommand("isready");
         uci.handleCommand("position startpos moves e2e4 e7e5 g1f3");
@@ -134,4 +134,31 @@ public class UciSanityTest {
         assertTrue(output.contains("info depth"), "Expected \"info depth\", but got:\n" + output);
         assertTrue(output.contains("bestmove"), "Expected \"bestmove\", but got:\n" + output);
     }
+
+    /**
+     * Requirement of (baseline) engine: Should respect time control
+     */
+    @Test
+    void testTimeControl_Cutechess() {
+        // Test white to move with normal time
+        uci.handleCommand("position startpos");
+        long startTime = System.currentTimeMillis();
+        uci.handleCommand("go wtime 3000 btime 3000 winc 100 binc 100");
+
+        await()
+                .atMost(Duration.ofSeconds(5))
+                .pollInterval(Duration.ofMillis(50))
+                .untilAsserted(() -> {
+                    String output = outContent.toString();
+                    assertTrue(output.contains("bestmove"));
+                });
+
+        long elapsedTime = System.currentTimeMillis() - startTime;
+        assertTrue(elapsedTime < 2000, "Engine should respect time limit, used " + elapsedTime + "ms");
+
+        String output = outContent.toString();
+        assertTrue(output.contains("bestmove"), "Engine should return a move");
+        assertFalse(output.contains("bestmove 0000"), "Engine should not return null move");
+    }
+
 }
