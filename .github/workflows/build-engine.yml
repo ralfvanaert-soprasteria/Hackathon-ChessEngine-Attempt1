@@ -43,21 +43,6 @@ jobs:
           echo "name=$SANITIZED" >> $GITHUB_OUTPUT
           echo "Sanitized name: $SANITIZED"
 
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hackathon-engine_${{ steps.sanitize.outputs.name }}
-          path: target/Hackathon-ChessEngine-*.jar
-          retention-days: 30
-
-      - name: Upload PR metadata
-        uses: actions/upload-artifact@v4
-        with:
-          name: pr-metadata
-          path: |
-            # We'll create this file below
-          retention-days: 1
-
       - name: Save PR metadata for commenting workflow
         run: |
           mkdir -p pr-metadata
@@ -66,7 +51,14 @@ jobs:
           echo "${{ steps.sanitize.outputs.name }}" > pr-metadata/artifact-name.txt
           echo "${{ github.event.pull_request.title }}" > pr-metadata/pr-title.txt
 
-      - name: Upload PR metadata (corrected)
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hackathon-engine_${{ steps.sanitize.outputs.name }}
+          path: target/Hackathon-ChessEngine-*.jar
+          retention-days: 30
+
+      - name: Upload PR metadata
         uses: actions/upload-artifact@v4
         with:
           name: pr-metadata
