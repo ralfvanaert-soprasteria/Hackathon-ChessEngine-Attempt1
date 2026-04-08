@@ -6,13 +6,19 @@ For competing, fork this repository. Please refer to the [Repository use for hac
 
 <!-- TOC -->
 * [Scope of Hackathon](#scope-of-hackathon)
-* [Setup](#setup)
-  * [Repository use for hackathon](#repository-use-for-hackathon)
-  * [KnightClubbingLogic](#knightclubbinglogic)
+* [Use of Repository](#use-of-repository)
+  * [Setup](#setup)
+  * [Workflow engine development](#workflow-engine-development)
+  * [Turning in your work](#turning-in-your-work)
+  * [Repository structure](#repository-structure)
+    * [Engine code](#engine-code)
+    * [SPRT folder](#sprt-folder)
 * [Development](#development)
-  * [Restrictions and guidelines](#restrictions-and-guidelines)
-    * [Guidelines](#guidelines)
-    * [Soft restrictions](#soft-restrictions)
+  * [Guidelines](#guidelines)
+    * [Fundamental](#fundamental)
+    * [Intermediate](#intermediate)
+    * [Advanced](#advanced)
+  * [Sources & help](#sources--help)
   * [SPRT testing](#sprt-testing)
     * [Using SPRT tests](#using-sprt-tests)
       * [test_sprt.sh parameters](#test_sprtsh-parameters)
@@ -28,82 +34,126 @@ Restrictions:
  
 Have fun and be creative!
 
-# Setup
+
+
+
+# Use of Repository
 Everything to develop this chess engine.
 Prerequisites:
 - Java 17 or higher
 - Maven
 - Git
 
-## Repository use for hackathon
-To participate in the hackathon, you need to fork this repository and push your changes to your fork.
-1. Fork this repository on GitHub.
-2. Clone your forked repository.
-3. Make your changes, commit and push them.
-4. Create a pull request to the original repository before the deadline.
+## Setup
+1. Fork this repository and clone it to your local machine.
+2. Clone the [KnightClubbingLogic repository](https://github.com/rpjvanaert/KnightClubbingLogic#)
+3. Build KnightClubbingLogic and install it to your local maven repository:
+```
+mvn clean install
+```
+4. Build the base version of this repository:
+```
+mvn clean package
+```
+5. Copy the generated jar to the `test-sprt/engines` directory. Copy it again and remove the '-SNAPSHOT' from the name.
+6. Run the SPRT tests to make sure everything is working:
+```shell
+docker compose up --build
+# or podman:
+podman compose up --build
+```
+7. You should see matches running, then you are ready to start developing your engine!
 
-## KnightClubbingLogic
-1. Clone the [repository](https://github.com/rpjvanaert/KnightClubbingLogic#)
-2. Navigate to the project directory and maven install:
-   ```
-   cd KnightClubbingLogic
-   mvn install
-   ```
-   
-## Fork this repository
-1. Fork this [repository](https://github.com/rpjvanaert/Hackathon-ChessEngine#).
-2. Clone it to your local machine.
-3. Navigate to the project directory and maven package:
-   ```
-   cd Hackathon-ChessEngine
-   mvn package
-   ```
-   If it runs successfully, you have a starting point.
+## Workflow engine development
+1. Make sure you have base version built and working with SPRT tests. (see above)
+2. Make changes and improvements to the engine.
+3. Build the new version and copy the jar to the `test-sprt/engines` directory. 
+4. Now you have two versions of the engine, make sure the docker-compose.yml points to the correct version-tags, see [sprt test paramaters](#test_sprtsh-parameters).
+5. Run the SPRT tests to see if it improved the engine. See [Using SPRT tests](#using-sprt-tests) for instructions.
+6. If it improved, commit the changes.
 
-## Build base version
-1. Build the base version jar and place it in the `test-sprt/engines` directory.
-   ```
-   mvn package
-   cp target/Hackathon-ChessEngine-1.0.jar test-sprt/engines/1.0.jar
-   ```
-   
 ## Turning in your work
 To turn in your work, create a pull request to the original repository before the deadline.
-Make sure to include a description of your changes and improvements in the pull request.
+A description of your changes and improvements is welcome in the pull request.
+
+## Repository structure
+Repository can be divided into two main parts: engine code and sprt folder.
+### Engine code
+The engine code is in the `src` folder. Within is a standard maven structure, it contains:
+- `App.java`: Application start point.*
+- `Uci.java`: UCI protocol implementation run by App.*
+- `EngineConst.java`: Constants used in the engine.
+- `search`: folder for search
+- `evaluation`: folder for evaluation
+- `ordering`: folder for move ordering
+
+\* = For hackathon, you should probably not change these.
+
+### SPRT folder
+The `test-sprt` folder contains everything related to the SPRT testing of the engine. For use see [SPRT testing](#sprt-testing) section.
+- `engines`: folder for testing engine jars, copy yours here.
+- `test_sprt.sh`: script to run the SPRT tests.*
+- `Dockerfile`: Dockerfile to build the image for testing.*
+- `docker-compose.yml`: Compose file to spin up testing environment. You can adjust [parameters](#test_sprtsh-parameters) when testing different versions.
+- `sprt_presests.ini`: Presets for SPRT test configs.*
+- `output/games.pgn`: Output file for games played after running SPRT tests.
+
+
 
 # Development
-The goal of this hackathon is to learn chess engine development and have fun improving the engine. 
-## Restrictions and guidelines
-To keep the challenge managable and learnable, there are some guidelines and soft restrictions.
-Guidelines to help you choose what to implement and in which order
-### Guidelines
-To guide you through the development, here are some key points.
-- todo
-- Search for sources.
-  - Google or DuckDuckGo are your best friends ;)
-    - Don't copy-paste, understand.
-    - Don't let LLMs generate it, at best use them to understand.
-  - [Chess Programming Wiki](https://www.chessprogramming.org/Main_Page)
-  - [Sebasian Lague's Chess Engine Video's (Episode 1 & 2)](https://www.youtube.com/watch?v=U4ogK0MIzqk&list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c)
+The goal of this hackathon is to learn chess engine development and have fun improving the engine.
+## Guidelines
+In order to decide what to implement in your engine, you should do it step by step and slowly challenge yourself more. Covering basics first is important to understanding and working of an engine.
+<br/>
+To categorize the steps there are: fundamental, intermediate and advanced steps.
+### Fundamental
+- Material evaluation
+- Piece-square tables (PST)
+- MVV-LVA ordering
+- Promotions ordering
+
+### Intermediate
+- Pawn structure evaluation*
+- Killer moves
+- Quiescence search
+- Mobility
+- Other evaluation *
+  - Bishop pair
+  - King safety
+  - etc.
+
+\* = Can become too much or too complex, do basic implementation.
+
+### Advanced
+- Principal Variation (PV) move ordering
+- Transposition table
+- History heuristic
+- Null move pruning
+- Late move reductions (LMR)
+
+## Sources & help
+- [Chess Programming Wiki](https://www.chessprogramming.org/Main_Page)
+- [Sebasian Lague's Chess Engine Video's (Episode 1 & 2)](https://www.youtube.com/watch?v=U4ogK0MIzqk&list=PLFt_AvWsXl0cvHyu32ajwh2qU1i6hl77c)
+- Google for topics you want to understand better
+- LLM's can be helpful to understand concepts. Don't copy or trust them blindly.
+- Ask me for help.
 
 ## SPRT testing
 Sequential Probability Ratio Testing (SPRT) is a statistical test method to compare two versions of a chess engine to determine if one is significantly better than the other.
-In english: test if your changes improved the engine or not.
-It runs games between base and new version until conclusion is reached.
+In other words: test if your changes improved the engine or not.
+You can have it run games between base and new version until conclusion is reached.
 
 ### Using SPRT tests
 To run the SPRT tests, first build the engine jar you want to test. 
 Make sure both base and new version jars are in the `test-sprt/engines` directory.
 Then run the docker compose setup to execute the tests. 
-By default it will run the test_sprt.sh script with '1.0' as base version and '1.0-SNAPSHOT' as new version.
-If you built different versions, change the parameters accordingly in the docker-compose.yml file. Also see `test-sprt/test_sprt.sh` for details.
+By default, it will run the test_sprt.sh script with '1.0' as base version and '1.0-SNAPSHOT' as new version.
+If you built different versions, change the parameters accordingly in the `docker-compose.yml` file. Also see `test-sprt/test_sprt.sh` for details.
 
 Rebuild image to pick up the engines:
 ```shell
 docker compose up --build
-```
-of Podman:
-```shell
+# or podman:
 podman compose up --build
 ```
 - H0 accepted: The new version is not better than the base version.
