@@ -48,12 +48,14 @@ public class Search {
             if (isDecisive(result)) break;
         }
 
+        bestResult.setTimeTakenMillis(getTimeTakenMillis());
         return bestResult;
     }
 
     private SearchResult searchDepth(BBoard board, int depth) {
         SearchResult bestResult = new SearchResult();
         bestResult.setScore(-INF);
+        bestResult.setDepth(depth);
         int alpha = -INF;
         int beta = INF;
         this.nodes = 0;
